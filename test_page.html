@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Draw GeoJSON points</title>
+    <meta property="og:description" content="Draw points from a GeoJSON collection to a map." />
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.5.2/dist/maplibre-gl.css' />
+    <script src='https://unpkg.com/maplibre-gl@3.5.2/dist/maplibre-gl.js'></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        html, body, #map { height: 100%; }
+      
+        .map-overlay {
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            position: absolute;
+            width: 200px;
+            top: 0;
+            left: 0;
+            padding: 10px;
+        }
+
+        .map-overlay .map-overlay-inner {
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .map-overlay-inner fieldset {
+            border: none;
+            padding: 0;
+            margin: 0 0 10px;
+        }
+
+        .map-overlay-inner fieldset:last-child {
+            margin: 0;
+        }
+
+        .map-overlay-inner select {
+            width: 100%;
+        }
+
+        .map-overlay-inner label {
+            display: block;
+            font-weight: bold;
+            margin: 0 0 5px;
+        }
+
+        .map-overlay-inner button {
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .map-overlay-inner button:focus {
+            outline: none;
+        }
+
+        .map-overlay-inner button:hover {
+            box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }      
+      
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<div class="map-overlay top">
+    <div class="map-overlay-inner">
+        <fieldset>
+            <label>Select layer</label>
+            <select id="layer" name="layer">
+                <option value="layer100KCircles">By circles 100K</option>
+                <option value="layer30KSymbol">Symbol layer 30K (no cluster)</option>
+                <option value="layer100KClustered">Symbol layer 100K (cluster)</option>
+                <option value="layer100KNoCluster">Symbol layer 100K (no cluster, error)</option>
+            </select>
+            <input type="hidden" id="previousLayerSelected" value="layer100KCircles"/>
+        </fieldset>
+    </div>
+</div>  
+<script>
+    const map = new maplibregl.Map({
+        container: 'map',
+        style:
+            'https://api.maptiler.com/maps/streets-v2/style.json?key=FmQB1aF3r9KDFZrvayyM',
+        center: [0, 0],
+        zoom: 1
+    });
+  
+    map.on('load', () => {
+      // Add an image to use as a custom marker
+      map.loadImage(
+        'https://local-mbo.com:7444/FeatureService/Ball_Picture?colorName=blue',
+        (error, image) => {
+          if (error) throw error;
+          map.addImage('custom-marker', image);
+        });
+      // Add a GeoJSON source with 15 points
+      map.addSource('layer100KNoCluster', {
+        'type': 'geojson',
+        'buffer': 0,
+        'data': 'https://local-mbo.com:7444/FeatureService/GeoJSONFromCsv?size=100K'
+      });
+      
+      map.addSource('layer100KClustered', {
+        'type': 'geojson',
+        'buffer': 0,
+        'cluster':true,
+        'clusterRadius':1,
+        'data': 'https://local-mbo.com:7444/FeatureService/GeoJSONFromCsv?size=100K'
+      });
+      
+      
+      map.addSource('layer30K', {
+        'type': 'geojson',
+        'buffer': 0,
+        'data': 'http://github.com/sergeysoftech/Testing/blob/main/GeoJSON30K.json'
+      });
+
+      // Add a symbol layer
+      map.addLayer({
+        'id': 'layer100KNoCluster',
+        'type': 'symbol',
+        'source': 'layer100KNoCluster',
+        
+        'layout': {
+          'icon-image': 'custom-marker',
+          'icon-overlap':'always',
+          'icon-ignore-placement':true,
+          'icon-size':0.5,
+          'symbol-z-order':'source',
+          'visibility':'none'
+        }
+      });
+      map.addLayer({
+        'id': 'layer100KClustered',
+        'type': 'symbol',
+        'source': 'layer100KClustered',
+        
+        'layout': {
+          'icon-image': 'custom-marker',
+          'icon-overlap':'always',
+          'icon-ignore-placement':true,
+          'icon-size':0.5,
+          'symbol-z-order':'source',
+          'visibility':'none'
+        }
+      });
+      map.addLayer({
+        'id': 'layer30KSymbol',
+        'type': 'symbol',
+        'source': 'layer30K',
+        
+        'layout': {
+          'icon-image': 'custom-marker',
+          'icon-overlap':'always',
+          'icon-ignore-placement':true,
+          'icon-size':0.5,
+          'symbol-z-order':'source',
+          'visibility':'none'
+        }
+      });
+      map.addLayer({
+        'id': 'layer100KCircles',
+        'type': 'circle',
+        'source': 'layer100KNoCluster',
+        'layout': {
+          'visibility':'visible'
+        },
+        'paint': {
+          'circle-color': '#1B22BA',
+          'circle-radius': 5,
+          'circle-stroke-color':'#000000'
+        }
+      });
+    });
+  
+    const layerControl = document.getElementById('layer');
+    const previousLayerSelected = document.getElementById('previousLayerSelected');  
+    console.log(layerControl);
+    console.log(layerControl.value);
+    layerControl.addEventListener('change', () => {
+      // Hide previous layer
+      if (previousLayerSelected.value && previousLayerSelected.value !== "")
+        {
+          map.setLayoutProperty(
+            previousLayerSelected.value,
+            'visibility',
+            "none"
+          );
+        }
+
+      // Set new layer
+      previousLayerSelected.value = layerControl.value
+      map.setLayoutProperty(
+        layerControl.value,
+        'visibility',
+        "visible"
+      );
+    });
+</script>
+</body>
+</html>

@@ -99,6 +99,18 @@
           if (error) throw error;
           map.addImage('custom-marker', image);
         });
+      map.loadImage(
+        'https://sergeysoftech.github.io/Testing/bullet_ball_shape_red.png',
+        (error, image) => {
+          if (error) throw error;
+          map.addImage('custom-marker-red', image);
+        });
+      map.loadImage(
+        'https://sergeysoftech.github.io/Testing/bullet_ball_shape_green.png',
+        (error, image) => {
+          if (error) throw error;
+          map.addImage('custom-marker-green', image);
+        });
       // Add a GeoJSON source with 15 points
       map.addSource('layer100KNoCluster', {
         'type': 'geojson',
@@ -142,7 +154,14 @@
         'source': 'layer100KClustered',
         
         'layout': {
-          'icon-image': 'custom-marker',
+          'icon-image': [
+                    'case',
+                    ['!', ['has', 'point_count']],
+                    'custom-marker-green',
+                    ['>', ['get', 'point_count'], 1],
+                    'custom-marker-red',
+                    'custom-marker-green'
+                ],
           'icon-overlap':'always',
           'icon-ignore-placement':true,
           'icon-size':0.5,
@@ -181,8 +200,6 @@
   
     const layerControl = document.getElementById('layer');
     const previousLayerSelected = document.getElementById('previousLayerSelected');  
-    console.log(layerControl);
-    console.log(layerControl.value);
     layerControl.addEventListener('change', () => {
       // Hide previous layer
       if (previousLayerSelected.value && previousLayerSelected.value !== "")

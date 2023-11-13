@@ -94,7 +94,7 @@
     map.on('load', () => {
       // Add an image to use as a custom marker
       map.loadImage(
-        'https://local-mbo.com:7444/FeatureService/Ball_Picture?colorName=blue',
+        'https://sergeysoftech.github.io/Testing/bullet_ball_shape_blue.png',
         (error, image) => {
           if (error) throw error;
           map.addImage('custom-marker', image);
@@ -103,7 +103,7 @@
       map.addSource('layer100KNoCluster', {
         'type': 'geojson',
         'buffer': 0,
-        'data': 'https://local-mbo.com:7444/FeatureService/GeoJSONFromCsv?size=100K'
+        'data': 'https://sergeysoftech.github.io/Testing/GeoJSON100K.json'
       });
       
       map.addSource('layer100KClustered', {
@@ -111,7 +111,7 @@
         'buffer': 0,
         'cluster':true,
         'clusterRadius':1,
-        'data': 'https://local-mbo.com:7444/FeatureService/GeoJSONFromCsv?size=100K'
+        'data': 'https://sergeysoftech.github.io/Testing/GeoJSON100K.json'
       });
       
       

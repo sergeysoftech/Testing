@@ -111,7 +111,7 @@
 <div class="size-overlay top">
     <div class="size-overlay-inner">
         <fieldset>
-            <label>Select size of marshal data (in bytes):</label>
+            <label>Select size of marshal data:</label>
             <select id="marshalSize">
                 <option value="128B">128 bytes</option>
                 <option value="1KB">1 KB</option>
@@ -195,9 +195,9 @@
     function onmessage(e) {
       const caption = e.data[0];
       const start = e.data[1];
-      // Convert absolute timestamps into window-relative timestamps
       const oneWayTime = e.data[2];
       const oneWayTimeOrigin = e.data[3];
+      // Convert absolute timestamps into window-relative timestamps
       const timeOriginDelta = oneWayTimeOrigin - performance.timeOrigin;
       const data = e.data[4];
       const roundTripTime = performance.now();
@@ -208,7 +208,7 @@
       var bb = new Blob([workerBody]);
       var workerURL = window.URL.createObjectURL(bb);
       var worker = new Worker(workerURL);
-      //window.URL.revokeObjectURL(workerURL);
+      window.URL.revokeObjectURL(workerURL);
       worker.onmessage = onmessage;
       return worker;
     }
@@ -235,6 +235,10 @@
     }
     
     function formatNumber(value) {
+      if (Math.abs(value) < 0.0001)
+      {
+        value = 0;
+      }
       return value.toFixed(3);
     }
     

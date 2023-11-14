@@ -1,0 +1,322 @@
+<html lang="en">
+  <head>
+    <title>Worker roundtrip performance</title>
+    <style>
+      .test-container
+      {
+        display: flex;
+        flex-direction: row;
+      }
+
+      .touch-pad {
+        width:100%;
+        height:500px;
+        margin:10px;
+        background-color: lightgray;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        border: 1px solid;
+      }
+
+      .log-container {
+        width:400px;
+        height:500px;
+        margin:10px;
+        background-color: white;
+        flex-direction: column;
+        align-items: stretch;
+        display:flex;
+      }
+      
+      .summary-statistic {
+        height:auto;
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        user-select: none;
+      }
+
+      .log-lines-container {
+        background-color: green;
+        flex:auto;
+        display:flex;
+        flex-direction: column;
+        font-size: large;
+        margin:5px 0px;
+      }
+      
+      .log-lines {
+        height:100%;
+        width:100%;
+        resize:none;
+      }
+
+      .has-hint {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        user-select: none;
+      }
+      
+      .size-overlay {
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        width: 200px;
+        top: 0;
+        left: 0;
+        padding-left: 10px;
+      }
+
+      .size-overlay .size-overlay-inner {
+        background-color: #fff;
+      }
+
+      .size-overlay-inner fieldset {
+        border: none;
+        padding: 0;
+        margin: 0 0 10px;
+      }
+
+      .size-overlay-inner fieldset:last-child {
+        margin: 0;
+      }
+
+      .size-overlay-inner select {
+        width: 100%;
+      }
+
+      .size-overlay-inner label {
+        display: block;
+        font-weight: bold;
+        margin: 0 0 5px;
+      }
+
+      .size-overlay-inner button {
+        display: inline-block;
+        width: 36px;
+        height: 20px;
+        border: none;
+        cursor: pointer;
+      }
+
+      .size-overlay-inner button:focus {
+        outline: none;
+      }
+
+      .size-overlay-inner button:hover {
+        box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.1);
+      }      
+      
+    </style>
+  </head>
+  <body>
+<div class="size-overlay top">
+    <div class="size-overlay-inner">
+        <fieldset>
+            <label>Select size of marshal data (in bytes):</label>
+            <select id="marshalSize">
+                <option value="128B">128 bytes</option>
+                <option value="1KB">1 KB</option>
+                <option value="10KB">10 KB</option>
+                <option value="100KB">100 KB</option>
+                <option value="500KB">500 KB</option>
+            </select>
+        </fieldset>
+    </div>
+</div>  
+    <div id="testContainer" class="test-container">
+      <div id="touchPad" class="touch-pad has-hint">
+        <span class="hint">Just use the mouse or touch on this surface to start logging.</span>
+      </div>
+      <div id="logContainer" class="log-container" >
+        <div id="summaryStatistic" class="summary-statistic">
+          <span id="logSummaryLabel" class="log-summary-label">Summary statistic will be shown there.</span>
+        </div>
+        <div id="logLinesContainer" class="log-lines-container">
+          <textarea id="logLines" class="log-lines" readonly="true" placeholder="Log evenst will be output there."></textarea>
+          <input type="button" value="Clear" onclick="clearLog();"/>
+        </div>
+      </div>
+    </div>
+  </body>
+  
+  <script id="worker" type="javascript/worker">
+    onmessage = function(e) {
+      // Convert worker-relative timestamps to absolute timestamps, then send to the window
+      const oneWayTime = performance.now();
+      const caption = e.data[0];
+      const start = e.data[1];
+      const data = e.data[2];
+      postMessage([caption, start, oneWayTime, performance.timeOrigin, data]);
+    }
+  </script>
+  
+  <script>
+    // Statistic variables
+    var registeredEventCount = 0;
+    var marshalMin = Infinity;
+    var marshalMax = 0;
+    var marshalTotal = 0;
+    var roundMin = Infinity;
+    var roundMax = 0;
+    var roundTotal = 0;
+    
+    // Cache DOM elements
+    const logLines = document.getElementById('logLines');
+    const summaryLine = document.getElementById('logSummaryLabel');
+    const workerBody = document.getElementById('worker').textContent;
+    const marshalSizeControl = document.getElementById('marshalSize');
+    
+    // Work variables
+    var isPointDown = false;
+    const worker = createWorker();
+    var workerData = undefined;
+
+    function onPointerDown(ev) {
+      isPointDown = true;
+      testWorker("Down", performance.now());
+    }
+    
+    function onPointerMove(ev) {
+      if (isPointDown)
+      {
+        testWorker("Move", performance.now());
+      }
+    }
+    
+    function onPointerUp(ev) {
+      isPointDown = false;
+      testWorker("Up  ", performance.now());
+    }
+    
+    function onPointerCancel(ev) {
+      isPointDown = false;
+      testWorker("Canc", performance.now());
+    }
+    
+    function onmessage(e) {
+      const caption = e.data[0];
+      const start = e.data[1];
+      // Convert absolute timestamps into window-relative timestamps
+      const oneWayTime = e.data[2];
+      const oneWayTimeOrigin = e.data[3];
+      const timeOriginDelta = oneWayTimeOrigin - performance.timeOrigin;
+      const data = e.data[4];
+      const roundTripTime = performance.now();
+      storeStatistic(caption, start, oneWayTime + timeOriginDelta, roundTripTime);
+    }
+    
+    function createWorker() {
+      var bb = new Blob([workerBody]);
+      var workerURL = window.URL.createObjectURL(bb);
+      var worker = new Worker(workerURL);
+      //window.URL.revokeObjectURL(workerURL);
+      worker.onmessage = onmessage;
+      return worker;
+    }
+    
+    function testWorker(caption, start) {
+      worker.postMessage([caption, start, workerData]);
+    }
+    
+    function storeStatistic(text, start, oneWayEnd, roundTripEnd) {
+        const oneWayTime = oneWayEnd - start;
+        const roundTripTime = roundTripEnd - start;
+        logLines.value += text + ", o: " + formatNumber(oneWayTime) + " ms, r: " + formatNumber(roundTripTime) + " ms.\n";
+      
+        ++registeredEventCount;
+        marshalMin = Math.min(marshalMin, oneWayTime)
+        marshalMax = Math.max(marshalMax, oneWayTime)
+        marshalTotal += oneWayTime;
+
+        roundMin = Math.min(roundMin, roundTripTime)
+        roundMax = Math.max(roundMax, roundTripTime)
+        roundTotal += roundTripTime;
+      
+        updateSummary();
+    }
+    
+    function formatNumber(value) {
+      return value.toFixed(3);
+    }
+    
+    function updateSummary() {
+      var summaryBuffer = "Summary:<br/>";
+      summaryBuffer += "&nbsp;&nbsp;Event count:" + registeredEventCount + "<br/>";
+
+      summaryBuffer += "&nbsp;&nbsp;One way marshal time (ms):<br/>";
+      
+      if (registeredEventCount > 0)
+      {
+        summaryBuffer += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avg:" + formatNumber(marshalTotal / registeredEventCount) + "&nbsp;";
+        summaryBuffer += "Min:" + formatNumber(marshalMin) + "&nbsp;";
+        summaryBuffer += "Max:" + formatNumber(marshalMax) + "&nbsp;<br/>";
+      }
+      
+      summaryBuffer += "&nbsp;&nbsp;Round trip marshal time (ms):<br/>";
+      if (registeredEventCount > 0)
+      {
+        summaryBuffer += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avg:" + formatNumber(roundTotal / registeredEventCount) + "&nbsp;";
+        summaryBuffer += "Min:" + formatNumber(roundMin) + "&nbsp;";
+        summaryBuffer += "Max:" + formatNumber(roundMax) + "&nbsp;";
+      }
+      summaryLine.innerHTML = summaryBuffer;
+    }
+    
+    function clearLog() {
+      logLines.value = '';
+      
+      registeredEventCount = 0;
+      marshalMin = Infinity;
+      marshalMax = 0;
+      marshalTotal = 0;
+      roundMin = Infinity;
+      roundMax = 0;
+      roundTotal = 0;
+      
+      updateSummary();
+    }
+    
+    function updateMarshalData() {
+        var newSize = 128;
+        switch(marshalSizeControl.value)
+        {
+          case '128B':
+            newSize = 128;
+            break;
+          case '1KB':
+            newSize = 1 * 1024;
+            break;
+          case '10KB':
+            newSize = 10 * 1024;
+            break;
+          case '100KB':
+            newSize = 100 * 1024;
+            break;
+          case '500KB':
+            newSize = 500 * 1024;
+            break;
+          default:
+            debugger;
+            newSize = 128;
+            break;
+        };
+        const arrLength = newSize / 8;
+        workerData = new Array(arrLength);
+        for(var idx = 0; idx < arrLength; ++idx){
+            workerData[idx] = Math.random();
+        }      
+    }
+    
+    const touchPad = document.getElementById('touchPad');
+    touchPad.addEventListener("pointerdown", onPointerDown, false);
+    touchPad.addEventListener("pointermove", onPointerMove, false);
+    touchPad.addEventListener("pointerup", onPointerUp, false);
+    touchPad.addEventListener("pointercancel", onPointerCancel, false);
+    
+    marshalSizeControl.addEventListener('change', updateMarshalData);
+
+    updateMarshalData();
+    updateSummary();
+    
+    
+  </script>  
+</html>

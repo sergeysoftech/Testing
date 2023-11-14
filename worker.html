@@ -44,6 +44,24 @@
         margin:5px 0px;
       }
       
+      .log-summary-label {
+        width:100%;
+        display: flex;
+        justify-content: left;
+      }
+      
+      .log-summary-label:has(.no-data) {
+        color:green;
+        font-size: large;
+        justify-content: center;
+      }
+      
+      .log-summary-label:has(.collecting-data) {
+        color:red;
+        font-size: large;
+        justify-content: center;
+      }
+      
       .log-lines {
         height:100%;
         width:100%;
@@ -132,7 +150,6 @@
         </div>
         <div id="logLinesContainer" class="log-lines-container">
           <textarea id="logLines" class="log-lines" readonly="true" placeholder="Log evenst will be output there."></textarea>
-          <input type="button" value="Clear" onclick="clearLog();"/>
         </div>
       </div>
     </div>
@@ -140,21 +157,17 @@
   
   <script id="worker" type="javascript/worker">
     onmessage = function(e) {
-      // Convert worker-relative timestamps to absolute timestamps, then send to the window
-      const oneWayTime = performance.now();
-      const caption = e.data[0];
-      const start = e.data[1];
-      const data = e.data[2];
-      postMessage([caption, start, oneWayTime, performance.timeOrigin, data]);
+      const eventCaption = e.data[0];
+      const eventTime = e.data[1];
+      const start = e.data[2];
+      const data = e.data[3];
+      postMessage([eventCaption, eventTime, start, data]);
     }
   </script>
   
   <script>
     // Statistic variables
     var registeredEventCount = 0;
-    var marshalMin = Infinity;
-    var marshalMax = 0;
-    var marshalTotal = 0;
     var roundMin = Infinity;
     var roundMax = 0;
     var roundTotal = 0;
@@ -169,39 +182,41 @@
     var isPointDown = false;
     const worker = createWorker();
     var workerData = undefined;
+    const statisticBuffer = new Array();
+    var lastEventTime = 0;
 
     function onPointerDown(ev) {
       isPointDown = true;
-      testWorker("Down", performance.now());
+      clearStatistic();
+      lastEventTime = window.performance.now();
     }
     
     function onPointerMove(ev) {
       if (isPointDown)
       {
-        testWorker("Move", performance.now());
+        const prevEventTime = lastEventTime;
+        lastEventTime = window.performance.now();
+        testWorker("Move", lastEventTime - prevEventTime, window.performance.now());
       }
     }
     
     function onPointerUp(ev) {
       isPointDown = false;
-      testWorker("Up  ", performance.now());
+      showStatistic();
     }
     
     function onPointerCancel(ev) {
       isPointDown = false;
-      testWorker("Canc", performance.now());
+      showStatistic();
     }
     
     function onmessage(e) {
-      const caption = e.data[0];
-      const start = e.data[1];
-      const oneWayTime = e.data[2];
-      const oneWayTimeOrigin = e.data[3];
-      // Convert absolute timestamps into window-relative timestamps
-      const timeOriginDelta = oneWayTimeOrigin - performance.timeOrigin;
-      const data = e.data[4];
-      const roundTripTime = performance.now();
-      storeStatistic(caption, start, oneWayTime + timeOriginDelta, roundTripTime);
+      const eventCaption = e.data[0];
+      const eventTime = e.data[1];
+      const start = e.data[2];
+      const data = e.data[3];
+      const roundTripTime = window.performance.now();
+      storeStatistic(eventCaption, eventTime, roundTripTime - start);
     }
     
     function createWorker() {
@@ -213,68 +228,68 @@
       return worker;
     }
     
-    function testWorker(caption, start) {
-      worker.postMessage([caption, start, workerData]);
+    function testWorker(eventCaption, eventTime, start) {
+      worker.postMessage([eventCaption, eventTime, start, workerData]);
     }
     
-    function storeStatistic(text, start, oneWayEnd, roundTripEnd) {
-        const oneWayTime = oneWayEnd - start;
-        const roundTripTime = roundTripEnd - start;
-        logLines.value += text + ", o: " + formatNumber(oneWayTime) + " ms, r: " + formatNumber(roundTripTime) + " ms.\n";
-      
+    function storeStatistic(eventCaption, eventTime, roundTripTime) {
         ++registeredEventCount;
-        marshalMin = Math.min(marshalMin, oneWayTime)
-        marshalMax = Math.max(marshalMax, oneWayTime)
-        marshalTotal += oneWayTime;
 
         roundMin = Math.min(roundMin, roundTripTime)
         roundMax = Math.max(roundMax, roundTripTime)
         roundTotal += roundTripTime;
       
+        statisticBuffer.push(
+          {
+            eventCaption: eventCaption,
+            eventTime: eventTime,
+            roundTripTime: roundTripTime
+          }
+        );
+    }
+    
+    function showStatistic()
+    {
+        var textBuffer = '';
+        statisticBuffer.forEach((item) => {
+          textBuffer += `${item.eventCaption} (+${formatNumber(item.eventTime)} ms), worker: ${formatNumber(item.roundTripTime)} ms.\n`;
+        });
+      
+        logLines.value = textBuffer;
+      
         updateSummary();
     }
     
     function formatNumber(value) {
-      if (Math.abs(value) < 0.0001)
-      {
-        value = 0;
-      }
-      return value.toFixed(3);
+      return value.toFixed(1);
     }
     
     function updateSummary() {
-      var summaryBuffer = "Summary:<br/>";
-      summaryBuffer += "&nbsp;&nbsp;Event count:" + registeredEventCount + "<br/>";
-
-      summaryBuffer += "&nbsp;&nbsp;One way marshal time (ms):<br/>";
-      
-      if (registeredEventCount > 0)
-      {
-        summaryBuffer += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avg:" + formatNumber(marshalTotal / registeredEventCount) + "&nbsp;";
-        summaryBuffer += "Min:" + formatNumber(marshalMin) + "&nbsp;";
-        summaryBuffer += "Max:" + formatNumber(marshalMax) + "&nbsp;<br/>";
-      }
-      
-      summaryBuffer += "&nbsp;&nbsp;Round trip marshal time (ms):<br/>";
-      if (registeredEventCount > 0)
-      {
-        summaryBuffer += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avg:" + formatNumber(roundTotal / registeredEventCount) + "&nbsp;";
-        summaryBuffer += "Min:" + formatNumber(roundMin) + "&nbsp;";
-        summaryBuffer += "Max:" + formatNumber(roundMax) + "&nbsp;";
-      }
-      summaryLine.innerHTML = summaryBuffer;
+        var summaryBuffer = "Summary:<br/>";
+        if (isPointDown) {
+          summaryBuffer = "<span class='collecting-data'>Recording statistics...</span>";
+        } else if (registeredEventCount > 0)
+        {
+          summaryBuffer = "Summary:<br/>";
+          summaryBuffer += "&nbsp;&nbsp;Event count:" + registeredEventCount + "<br/>";
+          summaryBuffer += "&nbsp;&nbsp;Round trip marshal time (ms):<br/>";
+          summaryBuffer += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avg:" + formatNumber(roundTotal / registeredEventCount) + "&nbsp;";
+          summaryBuffer += "Min:" + formatNumber(roundMin) + "&nbsp;";
+          summaryBuffer += "Max:" + formatNumber(roundMax) + "&nbsp;";
+        } else {
+          summaryBuffer = "<span class='no-data'>Waiting for data</span>";
+        }
+        summaryLine.innerHTML = summaryBuffer;
     }
     
-    function clearLog() {
+    function clearStatistic() {
       logLines.value = '';
       
       registeredEventCount = 0;
-      marshalMin = Infinity;
-      marshalMax = 0;
-      marshalTotal = 0;
       roundMin = Infinity;
       roundMax = 0;
       roundTotal = 0;
+      statisticBuffer.splice(0, statisticBuffer.length);
       
       updateSummary();
     }

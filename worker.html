@@ -197,7 +197,8 @@
         const prevEventTime = lastEventTime;
         lastEventTime = window.performance.now();
         testWorker("Move", lastEventTime - prevEventTime, window.performance.now());
-      }
+        return false;
+      }      
     }
     
     function onPointerUp(ev) {

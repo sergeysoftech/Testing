@@ -211,10 +211,12 @@
     }
     
     function onInteraction(interactionName) {
-      const prevEventTime = lastEventTime;
-      lastEventTime = window.performance.now();
-      const timeDelta = (prevEventTime !== 0) ? lastEventTime - prevEventTime : 0;
-      testWorker(interactionName, timeDelta, window.performance.now());
+      if (isPointDown) {
+        const prevEventTime = lastEventTime;
+        lastEventTime = window.performance.now();
+        const timeDelta = (prevEventTime !== 0) ? lastEventTime - prevEventTime : 0;
+        testWorker(interactionName, timeDelta, window.performance.now());
+      }
     }
     
     function onInteractionEnd() {
@@ -371,6 +373,7 @@
       
       registeredEventCount = 0;
       eventTimeSum = 0;
+      lastEventTime = 0;
       roundMin = Infinity;
       roundMax = 0;
       roundTotal = 0;

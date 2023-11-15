@@ -185,6 +185,7 @@
   <script>
     // Statistic variables
     var registeredEventCount = 0;
+    var eventTimeSum = 0;
     var roundMin = Infinity;
     var roundMax = 0;
     var roundTotal = 0;
@@ -313,6 +314,7 @@
     
     function storeStatistic(eventCaption, eventTime, roundTripTime) {
         ++registeredEventCount;
+        eventTimeSum += eventTime;
 
         roundMin = Math.min(roundMin, roundTripTime)
         roundMax = Math.max(roundMax, roundTripTime)
@@ -349,8 +351,11 @@
           summaryBuffer = "<span class='collecting-data'>Recording statistics...</span>";
         } else if (registeredEventCount > 0)
         {
+          const avgEventTime = registeredEventCount > 1 ? eventTimeSum/(registeredEventCount - 1) : 0;
+          
           summaryBuffer = "Summary:<br/>";
           summaryBuffer += "&nbsp;&nbsp;Event count:" + registeredEventCount + "<br/>";
+          summaryBuffer += "&nbsp;&nbsp;Event time avg:" + formatNumber(avgEventTime) + " ms<br/>";
           summaryBuffer += "&nbsp;&nbsp;Round trip marshal time (ms):<br/>";
           summaryBuffer += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avg:" + formatNumber(roundTotal / registeredEventCount) + "&nbsp;";
           summaryBuffer += "Min:" + formatNumber(roundMin) + "&nbsp;";
@@ -365,6 +370,7 @@
       logLines.value = '';
       
       registeredEventCount = 0;
+      eventTimeSum = 0;
       roundMin = Infinity;
       roundMax = 0;
       roundTotal = 0;

@@ -1,5 +1,6 @@
 <html lang="en">
   <head>
+    <meta name="viewport"  content="width=device-width, initial-scale=1.0, user-scalable=no"/>
     <title>Worker roundtrip performance</title>
     <style>
       .test-container
@@ -144,6 +145,18 @@
         </fieldset>
     </div>
 </div>  
+<div class="size-overlay top">
+    <div class="size-overlay-inner">
+        <fieldset>
+            <label>Select type of event to capture:</label>
+            <select id="eventType">
+                <option value="Pointer">Pointer</option>
+                <option value="Mouse">Mouse</option>
+                <option value="Touch">Touch</option>
+            </select>
+        </fieldset>
+    </div>
+</div>  
     <div id="testContainer" class="test-container">
       <div id="touchPad" class="touch-pad has-hint">
         <span class="hint">Tap this surface to start logging.</span>
@@ -181,6 +194,7 @@
     const summaryLine = document.getElementById('logSummaryLabel');
     const workerBody = document.getElementById('worker').textContent;
     const marshalSizeControl = document.getElementById('marshalSize');
+    const eventTypeControl = document.getElementById('eventType');
     
     // Work variables
     var isPointDown = false;
@@ -189,31 +203,91 @@
     const statisticBuffer = new Array();
     var lastEventTime = 0;
 
-    function onPointerDown(ev) {
+    function onInteractionStart() {
       isPointDown = true;
       clearStatistic();
+      lastEventTime = 0;
+    }
+    
+    function onInteraction(interactionName) {
+      const prevEventTime = lastEventTime;
       lastEventTime = window.performance.now();
+      const timeDelta = (prevEventTime !== 0) ? lastEventTime - prevEventTime : 0;
+      testWorker(interactionName, timeDelta, window.performance.now());
+    }
+    
+    function onInteractionEnd() {
+      isPointDown = false;
+      showStatistic();
+    }
+    
+    function onPointerDown(ev) {
+      if (eventTypeControl.value == 'Pointer') {
+        onInteractionStart();
+      }
     }
     
     function onPointerMove(ev) {
-      if (isPointDown)
-      {
-        const prevEventTime = lastEventTime;
-        lastEventTime = window.performance.now();
-        testWorker("Move", lastEventTime - prevEventTime, window.performance.now());
-        return false;
-      }      
+      if (eventTypeControl.value == 'Pointer') {
+        onInteraction("Pointer");
+      }
     }
     
     function onPointerUp(ev) {
-      isPointDown = false;
-      showStatistic();
+      if (eventTypeControl.value == 'Pointer') {
+        onInteractionEnd();
+      }
     }
     
     function onPointerCancel(ev) {
-      isPointDown = false;
-      showStatistic();
+      if (eventTypeControl.value == 'Pointer') {
+        onInteractionEnd();
+      }
     }
+    
+    function onMouseDown(ev) {
+      if (eventTypeControl.value == 'Mouse') {
+        onInteractionStart();
+      }
+    }
+    
+    function onMouseMove(ev) {
+      if (eventTypeControl.value == 'Mouse') {
+        onInteraction("Mouse");
+      }
+    }
+    
+    function onMouseUp(ev) {
+      if (eventTypeControl.value == 'Mouse') {
+        onInteractionEnd();
+      }
+    }
+    
+    function onTouchDown(ev) {
+      if (eventTypeControl.value == 'Touch') {
+        onInteractionStart();
+      }
+    }
+    
+    function onTouchMove(ev) {
+      if (eventTypeControl.value == 'Touch') {
+        onInteraction("Pointer");
+      }
+      
+      event.preventDefault();
+    }
+    
+    function onTouchUp(ev) {
+      if (eventTypeControl.value == 'Touch') {
+        onInteractionEnd();
+      }
+    }
+    
+    function onTouchCancel(ev) {
+      if (eventTypeControl.value == 'Touch') {
+        onInteractionEnd();
+      }
+    }    
     
     function onmessage(e) {
       const eventCaption = e.data[0];
@@ -335,7 +409,16 @@
     touchPad.addEventListener("pointermove", onPointerMove, false);
     touchPad.addEventListener("pointerup", onPointerUp, false);
     touchPad.addEventListener("pointercancel", onPointerCancel, false);
+
+    touchPad.addEventListener("mousedown", onMouseDown, false);
+    touchPad.addEventListener("mousemove", onMouseMove, false);
+    touchPad.addEventListener("mouseup", onMouseUp, false);
     
+    touchPad.addEventListener("touchstart", onTouchDown, false);
+    touchPad.addEventListener("touchmove", onTouchMove, false);
+    touchPad.addEventListener("touchend", onTouchUp, false);
+    touchPad.addEventListener("touchcancel", onTouchCancel, false);
+
     marshalSizeControl.addEventListener('change', updateMarshalData);
 
     updateMarshalData();

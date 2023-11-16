@@ -512,6 +512,7 @@
     var currentWorkerTestFunction;
     function runBatchTest() {
       clearStatistic();
+      summaryLine.innerHTML = "<span class='collecting-data'>Calculating...</span>";
       const testingApproachCtl = document.getElementById('testingApproach');
       const iterationCountCtl = document.getElementById('iterationCount');
       iterationCount = parseInt(iterationCountCtl.value);

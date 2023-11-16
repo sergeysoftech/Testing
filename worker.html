@@ -126,37 +126,64 @@
 
       .size-overlay-inner button:hover {
         box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.1);
-      }      
+      }
+      
+      .settings-section {
+        display:flex;
+      }
+      
+      .test-button {
+        width: 200px;
+        height: 50px;
+        margin: 0px 10px;
+      }
       
     </style>
   </head>
   <body>
-<div class="size-overlay top">
-    <div class="size-overlay-inner">
-        <fieldset>
-            <label>Select size of marshal data:</label>
-            <select id="marshalSize">
-                <option value="128B">128 bytes</option>
-                <option value="1KB">1 KB</option>
-                <option value="10KB">10 KB</option>
-                <option value="100KB">100 KB</option>
-                <option value="500KB">500 KB</option>
-            </select>
-        </fieldset>
-    </div>
-</div>  
-<div class="size-overlay top">
-    <div class="size-overlay-inner">
-        <fieldset>
-            <label>Select type of event to capture:</label>
-            <select id="eventType">
-                <option value="Pointer">Pointer</option>
-                <option value="Mouse">Mouse</option>
-                <option value="Touch">Touch</option>
-            </select>
-        </fieldset>
-    </div>
-</div>  
+<div class="settings-section">
+    <div class="size-overlay top">
+        <div class="size-overlay-inner">
+            <fieldset>
+                <label>Select size of marshal data:</label>
+                <select id="marshalSize">
+                    <option value="128B">128 bytes</option>
+                    <option value="1KB">1 KB</option>
+                    <option value="10KB">10 KB</option>
+                    <option value="100KB">100 KB</option>
+                    <option value="500KB">500 KB</option>
+                </select>
+            </fieldset>
+        </div>
+    </div>  
+    <div class="size-overlay top">
+        <div class="size-overlay-inner">
+            <fieldset>
+                <label>Select type of event to capture:</label>
+                <select id="eventType">
+                    <option value="Pointer">Pointer</option>
+                    <option value="Mouse">Mouse</option>
+                    <option value="Touch">Touch</option>
+                </select>
+            </fieldset>
+        </div>
+    </div>  
+    <div class="size-overlay top">
+        <div class="size-overlay-inner">
+            <fieldset>
+                <label>New testing approach:</label>
+                <select id="testingApproach">
+                    <option value="Array">Non-transferable</option>
+                    <option value="Transferable">Transferable</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <label>Iteration count:</label>
+                <input id="iterationCount" type="text" value="1000" />
+            </fieldset>
+        </div>
+    </div>  
+</div>
     <div id="testContainer" class="test-container">
       <div id="touchPad" class="touch-pad has-hint">
         <span class="hint">Tap this surface to start logging.</span>
@@ -170,6 +197,7 @@
         </div>
       </div>
     </div>
+    <input type="button" class="test-button" value="Run batch test" onclick="runBatchTest()"/>
   </body>
   
   <script id="worker" type="javascript/worker">
@@ -182,6 +210,20 @@
     }
   </script>
   
+  <script id="workerBatch" type="javascript/worker">
+    onmessage = function(e) {
+      const data = e.data;
+      postMessage(data);
+    }
+  </script>
+  
+  <script id="workerBatchTransferable" type="javascript/worker">
+    onmessage = function(e) {
+      const data = e.data;
+      postMessage(data, [data]);
+    }
+  </script>
+
   <script>
     // Statistic variables
     var registeredEventCount = 0;
@@ -193,13 +235,15 @@
     // Cache DOM elements
     const logLines = document.getElementById('logLines');
     const summaryLine = document.getElementById('logSummaryLabel');
-    const workerBody = document.getElementById('worker').textContent;
     const marshalSizeControl = document.getElementById('marshalSize');
     const eventTypeControl = document.getElementById('eventType');
     
     // Work variables
     var isPointDown = false;
-    const worker = createWorker();
+    const worker = createWorker(document.getElementById('worker').textContent, onmessage);
+    const workerBatch = createWorker(document.getElementById('workerBatch').textContent, onWorkerBatch);
+    const workerBatchTransferable = createWorker(document.getElementById('workerBatchTransferable').textContent, onWorkerBatch);
+    
     var workerData = undefined;
     const statisticBuffer = new Array();
     var lastEventTime = 0;
@@ -301,12 +345,26 @@
       storeStatistic(eventCaption, eventTime, roundTripTime - start);
     }
     
-    function createWorker() {
+    function onWorkerBatch(e) {
+      const data = e.data;
+      
+      ++currentIteration;
+      if (currentIteration < iterationCount) {
+        // run next iteration
+        currentWorkerTestFunction(data);
+      } else {
+        // show statistic
+        roundTotal = performance.now() - iterationStartTimeStamp;
+        updateBatchSummary();
+      }
+    }
+    
+    function createWorker(workerBody, callback) {
       var bb = new Blob([workerBody]);
       var workerURL = window.URL.createObjectURL(bb);
       var worker = new Worker(workerURL);
       window.URL.revokeObjectURL(workerURL);
-      worker.onmessage = onmessage;
+      worker.onmessage = callback;
       return worker;
     }
     
@@ -314,6 +372,14 @@
       worker.postMessage([eventCaption, eventTime, start, workerData]);
     }
     
+    function testWorkerNonTransferable(data) {
+        currentWorker.postMessage(data);
+    }
+    
+    function testWorkerTransferable(data) {
+        currentWorker.postMessage(data, [data]);
+    }
+
     function storeStatistic(eventCaption, eventTime, roundTripTime) {
         ++registeredEventCount;
         eventTimeSum += eventTime;
@@ -344,7 +410,7 @@
     }
     
     function formatNumber(value) {
-      return value.toFixed(1);
+      return value.toFixed(3);
     }
     
     function updateSummary() {
@@ -368,6 +434,20 @@
         summaryLine.innerHTML = summaryBuffer;
     }
     
+    function updateBatchSummary() {
+        var summaryBuffer = "Summary:<br/>";
+        if (currentIteration > 0)
+        {
+          summaryBuffer = "Summary:<br/>";
+          summaryBuffer += "&nbsp;&nbsp;Iteration count:" + currentIteration + "<br/>";
+          summaryBuffer += "&nbsp;&nbsp;Round trip marshal time (ms):<br/>";
+          summaryBuffer += "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Avg:" + formatNumber(roundTotal / currentIteration) + "&nbsp;";
+        } else {
+          summaryBuffer = "<span class='no-data'>No iteration were processed</span>";
+        }
+        summaryLine.innerHTML = summaryBuffer;
+    }    
+    
     function clearStatistic() {
       logLines.value = '';
       
@@ -382,7 +462,7 @@
       updateSummary();
     }
     
-    function updateMarshalData() {
+    function getRequestedDataSize() {
         var newSize = 128;
         switch(marshalSizeControl.value)
         {
@@ -406,11 +486,50 @@
             newSize = 128;
             break;
         };
-        const arrLength = newSize / 8;
+        return newSize;
+    }
+    
+    function createTransferableData() {
+      const arrLength = getRequestedDataSize();
+      var uInt8Array = new Uint8Array(new ArrayBuffer(arrLength));
+      for(var idx = 0; idx < arrLength; ++idx){
+        uInt8Array[idx] = Math.random() * 255;
+      }      
+      return uInt8Array;
+    }
+    
+    function updateMarshalData() {
+        const arrLength = getRequestedDataSize() / 8;
         workerData = new Array(arrLength);
         for(var idx = 0; idx < arrLength; ++idx){
             workerData[idx] = Math.random();
         }      
+    }
+    
+    var currentIteration = 0;
+    var iterationCount = 0;
+    var currentWorker;
+    var currentWorkerTestFunction;
+    function runBatchTest() {
+      clearStatistic();
+      const testingApproachCtl = document.getElementById('testingApproach');
+      const iterationCountCtl = document.getElementById('iterationCount');
+      iterationCount = parseInt(iterationCountCtl.value);
+      currentIteration = 0;
+      var data;
+      if (testingApproachCtl.value == 'Transferable') {
+          currentWorkerTestFunction = testWorkerTransferable;
+          currentWorker = workerBatchTransferable;
+          data = createTransferableData().buffer;
+      } else {
+          currentWorkerTestFunction = testWorkerNonTransferable;
+          currentWorker = workerBatch;
+          data = workerData;
+      }
+      
+      // Run tests
+      iterationStartTimeStamp = performance.now();
+      currentWorkerTestFunction(data);
     }
     
     const touchPad = document.getElementById('touchPad');

@@ -198,6 +198,7 @@
       </div>
     </div>
     <input type="button" class="test-button" value="Run batch test" onclick="runBatchTest()"/>
+    <input type="button" class="test-button" value="Run serialization tests" onclick="runSerializationTest()"/>
   </body>
   
   <script id="worker" type="javascript/worker">
@@ -531,6 +532,44 @@
       // Run tests
       iterationStartTimeStamp = performance.now();
       currentWorkerTestFunction(data);
+    }
+    
+    function runSerializationTest() {
+      summaryLine.innerHTML = "<span class='collecting-data'>Calculating...</span>";
+
+      const iterationCountCtl = document.getElementById('iterationCount');
+      const iterationCount = parseInt(iterationCountCtl.value);
+      var iterationIdx = 0;
+      
+      var startBinaryTimestamp = performance.now();
+      for(iterationIdx = 0; iterationIdx < iterationCount; ++iterationIdx)
+      {
+        const float64 = new Float64Array(workerData);
+        const item1 = float64[0];
+      }
+      var endBinaryTimestamp = performance.now();
+      
+      var startStringifyTimestamp = performance.now();
+      for(iterationIdx = 0; iterationIdx < iterationCount; ++iterationIdx)
+      {
+        const stringRepresentation = JSON.stringify(workerData);
+      }
+      var endStringifyTimestamp = performance.now();
+      
+      var startStructuredTimestamp = performance.now();
+      for(iterationIdx = 0; iterationIdx < iterationCount; ++iterationIdx)
+      {
+        const sructRepresentation = structuredClone(workerData);
+        const item3 = sructRepresentation[0];
+      }
+      var endStructuredTimestamp = performance.now();
+      
+      summaryBuffer = "Summary:<br/>";
+      summaryBuffer += "&nbsp;&nbsp;Binary serialization (ms):" + formatNumber((endBinaryTimestamp - startBinaryTimestamp) / iterationCount) + "<br/>";
+      summaryBuffer += "&nbsp;&nbsp;Stringify serialization (ms):" + formatNumber((endStringifyTimestamp - startStringifyTimestamp) / iterationCount) + "<br/>";
+      summaryBuffer += "&nbsp;&nbsp;Structured serialization (ms):" + formatNumber((endStructuredTimestamp - startStructuredTimestamp) / iterationCount) + "<br/>";
+
+      summaryLine.innerHTML = summaryBuffer;
     }
     
     const touchPad = document.getElementById('touchPad');

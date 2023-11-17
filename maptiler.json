@@ -5432,7 +5432,7 @@
 				"text-letter-spacing": 0.1,
 				"text-ignore-placement":"true",
 				"text-justify":"auto",
-				"text-overlap":"always",
+				"text-overlap":"always"
 			},
 			"paint": {
 				"text-color": "hsl(48,4%,44%)",
@@ -5600,7 +5600,7 @@
 				"icon-allow-overlap": true,
 				"text-ignore-placement":"true",
 				"text-justify":"auto",
-				"text-overlap":"always",
+				"text-overlap":"always"
 			},
 			"paint": {
 				"text-color": [
@@ -5783,7 +5783,7 @@
 				"icon-allow-overlap": true,
 				"text-ignore-placement":"true",
 				"text-justify":"auto",
-				"text-overlap":"always",
+				"text-overlap":"always"
 			},
 			"paint": {
 				"text-color": "hsl(0,0%,20%)",

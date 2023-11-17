@@ -5430,7 +5430,7 @@
 				"text-max-width": 8,
 				"text-transform": "uppercase",
 				"text-letter-spacing": 0.1,
-				"text-ignore-placement":"true",
+				"text-ignore-placement":true,
 				"text-justify":"auto",
 				"text-overlap":"always"
 			},
@@ -5598,7 +5598,7 @@
 				"icon-optional": false,
 				"text-max-width": 8,
 				"icon-allow-overlap": true,
-				"text-ignore-placement":"true",
+				"text-ignore-placement":true,
 				"text-justify":"auto",
 				"text-overlap":"always"
 			},
@@ -5781,7 +5781,7 @@
 				"icon-optional": false,
 				"text-max-width": 8,
 				"icon-allow-overlap": true,
-				"text-ignore-placement":"true",
+				"text-ignore-placement":true,
 				"text-justify":"auto",
 				"text-overlap":"always"
 			},

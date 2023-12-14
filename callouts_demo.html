@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Draw GeoJSON points</title>
+    <meta property="og:description" content="Draw points from a GeoJSON collection to a map." />
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.5.2/dist/maplibre-gl.css' />
+    <script src='https://unpkg.com/maplibre-gl@3.5.2/dist/maplibre-gl.js'></script>
+    <style>
+        body { margin: 0; padding: 0; }
+        html, body, #map { height: 100%; }
+      
+        .map-overlay {
+            font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            position: absolute;
+            width: 200px;
+            top: 0;
+            left: 0;
+            padding: 10px;
+        }
+
+        .map-overlay .map-overlay-inner {
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .map-overlay-inner fieldset {
+            border: none;
+            padding: 0;
+            margin: 0 0 10px;
+        }
+
+        .map-overlay-inner fieldset:last-child {
+            margin: 0;
+        }
+
+        .map-overlay-inner select {
+            width: 100%;
+        }
+
+        .map-overlay-inner label {
+            display: block;
+            font-weight: bold;
+            margin: 0 0 5px;
+        }
+
+        .map-overlay-inner button {
+            display: inline-block;
+            width: 36px;
+            height: 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .map-overlay-inner button:focus {
+            outline: none;
+        }
+
+        .map-overlay-inner button:hover {
+            box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.1);
+        }      
+      
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<div class="map-overlay top">
+    <div class="map-overlay-inner">
+        <fieldset>
+            <label>Select callout layers:</label>
+            <select id="layer" name="layer">
+                <option value="layerBig">Big (400+ points)</option>
+                <option value="layerSmall">Small (5 points)</option>
+                <option value="layerBoth">Both</option>
+            </select>
+        </fieldset>
+    </div>
+</div>  
+<script>
+  const map = new maplibregl.Map({
+        container: 'map',
+        style:
+            'https://api.maptiler.com/maps/streets-v2/style.json?key=FmQB1aF3r9KDFZrvayyM',
+        center: [-96, 37.8],
+        zoom: 3.5,
+    });
+  
+    map.on('load', () => {
+      // Add an image to use as a custom marker
+      map.loadImage(
+        'https://sergeysoftech.github.io/Testing/bullet_ball_shape_blue.png',
+        (error, image) => {
+          if (error) throw error;
+          map.addImage('custom-marker', image);
+        });
+      map.loadImage(
+        'https://sergeysoftech.github.io/Testing/bullet_ball_shape_red.png',
+        (error, image) => {
+          if (error) throw error;
+          map.addImage('custom-marker-red', image);
+        });
+      map.loadImage(
+        'https://sergeysoftech.github.io/Testing/bullet_ball_shape_green.png',
+        (error, image) => {
+          if (error) throw error;
+          map.addImage('custom-marker-green', image);
+        });
+      
+      map.loadImage(
+        'https://sergeysoftech.github.io/Testing/callout.png', 
+        (error, image) => {
+          if (error) throw error;
+          map.addImage('callout', image, {
+            content: [16, 11, 40, 14],
+            stretchX: [[17, 39]],
+            stretchY: [[11, 14]]
+          });
+        }
+      );      
+      // Add a GeoJSON source with 5 points
+      map.addSource('calloutsSource', {
+        'type': 'geojson',
+        'buffer': 0,
+        'data': 'https://sergeysoftech.github.io/Testing/GeoJSON5.json'
+      });
+
+      // Add a GeoJSON source with 400+ points
+      map.addSource('calloutsBigSource', {
+        'type': 'geojson',
+        'buffer': 0,
+        'data': 'https://sergeysoftech.github.io/Testing/microsoft.geojson'
+      });
+
+      // Add layers
+      addCalloutLayer('dataLayerMicrosoft', 'calloutLayerMicrosoft', 'calloutsBigSource', 'custom-marker-red', 'visible');
+      
+      addCalloutLayer('dataLayerSmall', 'calloutLayerSmall', 'calloutsSource', 'custom-marker', 'none');
+      
+      map.setLayoutProperty('calloutLayerMicrosoft', 
+          'text-field', [
+                          'format',
+                          ['get', 'Company_Name'],
+                          { 'font-scale': 1.0 },
+                          '\n',
+                          { 'font-scale': 1.0 },
+                          ['get', 'Physical_Address'],
+                          { 'font-scale': 1.0 },
+                          '\n',
+                          { 'font-scale': 1.0 },
+                          'Phone: ',
+                          { 
+                            'font-scale': 0.8,
+                            'text-font': ['literal', ["Open Sans Bold","Arial Unicode MS Bold"]]
+                          },
+                          ['get', 'Phone'],
+                          { 
+                            'font-scale': 0.8,
+                            'text-font': ['literal', ["Open Sans Regular","Arial Unicode MS Regular"]]
+                          },
+
+        ]);      
+
+      map.setLayoutProperty('calloutLayerSmall', 
+          'text-field', [
+                          'format',
+                          ['get', 'Company name'],
+                          { 'font-scale': 1.0 },
+                          '\n',
+                          { 'font-scale': 1.0 },
+                          ['get', 'address'],
+                          { 'font-scale': 1.0 },
+                          '\n',
+                          { 'font-scale': 1.0 },
+                          'Phone: ',
+                          { 
+                            'font-scale': 0.8,
+                            'text-font': ['literal', ["Open Sans Bold","Arial Unicode MS Bold"]]
+                          },
+                          ['get', 'Phone'],
+                          { 
+                            'font-scale': 0.8,
+                            'text-font': ['literal', ["Open Sans Regular","Arial Unicode MS Regular"]]
+                          },
+                          '\n',
+                          { 'font-scale': 1.0 },
+                          'Sales: ',
+                          { 
+                            'font-scale': 0.8,
+                            'text-font': ['literal', ["Open Sans Bold","Arial Unicode MS Bold"]]
+                          },
+                          ['get', 'sales'],
+                          { 
+                            'font-scale': 0.8,
+                            'text-font': ['literal', ["Open Sans Regular","Arial Unicode MS Regular"]]
+                          },
+                          '\n',
+                          { 'font-scale': 1.0 },
+                        'Employees: ',
+                          { 
+                            'font-scale': 0.8,
+                            'text-font': ['literal', ["Open Sans Bold","Arial Unicode MS Bold"]]
+                          },
+                        ['get', 'Eployes'],
+                          { 
+                            'font-scale': 0.8,
+                            'text-font': ['literal', ["Open Sans Regular","Arial Unicode MS Regular"]]
+                          }
+        ]);      
+    });
+  
+  function addCalloutLayer(idBaselayer, idCalloutLayer, source, symbol, visibility)
+  {
+      map.addLayer({
+        'id': idBaselayer,
+        'type': 'symbol',
+        'source': source,
+        
+        'layout': {
+          'icon-image': symbol,
+          'icon-overlap':'always',
+          'icon-ignore-placement':true,
+          'icon-size':0.5,
+          'symbol-z-order':'source',
+          'visibility':visibility
+        }
+      });
+
+      map.addLayer({
+        'id': idCalloutLayer,
+        'type': 'symbol',
+        'source': source,
+        
+        'paint': {
+          'icon-translate': [15,-15],
+          'text-translate': [15,-15],
+        },
+        
+        'layout': {
+          'icon-image': 'callout',
+          'icon-overlap':'always',
+          'icon-ignore-placement':true,
+          'icon-text-fit':'both',
+          'icon-anchor':'bottom-left',
+          'text-anchor':'bottom-left',
+          'text-justify':'left',
+          'symbol-z-order':'source',
+          'visibility':visibility
+        }
+      });      
+  }
+  
+    const layerControl = document.getElementById('layer');
+    layerControl.addEventListener('change', () => {
+        var smallLayerVisibility = 'none';
+        var microsoftLayerVisibility = 'none';
+        if (layerControl.value == 'layerBoth')
+        {
+          smallLayerVisibility = 'visible';
+          microsoftLayerVisibility = 'visible';
+        }
+        if (layerControl.value == 'layerSmall')
+        {
+          smallLayerVisibility = 'visible';
+          microsoftLayerVisibility = 'none';
+        }
+        if (layerControl.value == 'layerBig')
+        {
+          smallLayerVisibility = 'none';
+          microsoftLayerVisibility = 'visible';
+        }
+
+        map.setLayoutProperty('dataLayerMicrosoft', 'visibility', microsoftLayerVisibility);
+        map.setLayoutProperty('calloutLayerMicrosoft', 'visibility', microsoftLayerVisibility);
+        map.setLayoutProperty('dataLayerSmall', 'visibility', smallLayerVisibility);
+        map.setLayoutProperty('calloutLayerSmall', 'visibility', smallLayerVisibility);
+    });  
+</script>
+</body>
+</html>

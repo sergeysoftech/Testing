@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Draw GeoJSON points</title>
-    <meta property="og:description" content="Draw points from a GeoJSON collection to a map." />
+    <title>Callouts drawing</title>
+    <meta property="og:description" content="Draw callouts for GeoJSON collection to a map." />
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.5.2/dist/maplibre-gl.css' />
@@ -136,9 +136,11 @@
       });
 
       // Add layers
-      addCalloutLayer('dataLayerMicrosoft', 'calloutLayerMicrosoft', 'calloutsBigSource', 'custom-marker-red', 'visible');
-      
-      addCalloutLayer('dataLayerSmall', 'calloutLayerSmall', 'calloutsSource', 'custom-marker', 'none');
+      addDataLayer('dataLayerMicrosoft', 'calloutsBigSource', 'custom-marker-red', 'visible');
+      addDataLayer('dataLayerSmall', 'calloutsSource', 'custom-marker', 'none');
+
+      addCalloutLayer('calloutLayerMicrosoft', 'calloutsBigSource', 'custom-marker-red', 'visible');
+      addCalloutLayer('calloutLayerSmall', 'calloutsSource', 'custom-marker', 'none');
       
       map.setLayoutProperty('calloutLayerMicrosoft', 
           'text-field', [
@@ -212,10 +214,10 @@
         ]);      
     });
   
-  function addCalloutLayer(idBaselayer, idCalloutLayer, source, symbol, visibility)
+  function addDataLayer(idDataLyer, source, symbol, visibility)
   {
       map.addLayer({
-        'id': idBaselayer,
+        'id': idDataLyer,
         'type': 'symbol',
         'source': source,
         
@@ -228,7 +230,10 @@
           'visibility':visibility
         }
       });
-
+  }
+  
+  function addCalloutLayer(idCalloutLayer, source, symbol, visibility)
+  {
       map.addLayer({
         'id': idCalloutLayer,
         'type': 'symbol',

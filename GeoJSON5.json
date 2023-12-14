@@ -1,0 +1,75 @@
+{
+    "features": [
+        {
+            "geometry": {
+                "coordinates": [
+                    -121.2912591,
+                    37.95793455
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "address": "425 N El Dorado St",
+                "sales": "12443808"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    -80.30525273,
+                    25.69553636
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "address": "8040 Sw 69Th Ave",
+                "sales": "13767864"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    -76.87608909,
+                    41.17876091
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "address": "2218 State Route 54",
+                "sales": "1378510"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    -87.44710091,
+                    41.63902909
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "address": "2002 E Columbus Dr",
+                "sales": "18001101"
+            },
+            "type": "Feature"
+        },
+        {
+            "geometry": {
+                "coordinates": [
+                    -121.8514845,
+                    36.60387636
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "address": "550 Harcourt Ave",
+                "sales": "7893168"
+            },
+            "type": "Feature"
+        }
+    ],
+    "type": "FeatureCollection"
+}

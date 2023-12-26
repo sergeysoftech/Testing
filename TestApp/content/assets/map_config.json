@@ -91,12 +91,12 @@
     ],
     "sources": {
         "Counties": {
-            "data": "/content/assets/counties.json",
+            "data": "content/assets/counties.json",
             "generateId": true,
             "type": "geojson"
         },
         "GeoJSON5": {
-            "data": "/content/assets/GeoJSON5.json",
+            "data": "content/assets/GeoJSON5.json",
             "generateId": false,
             "type": "geojson"
         },
@@ -106,7 +106,7 @@
             "type": "geojson"
         },
         "StatesCapital": {
-            "data": "/content/assets/statescap.geojson",
+            "data": "content/assets/statescap.geojson",
             "generateId": false,
             "type": "geojson"
         }

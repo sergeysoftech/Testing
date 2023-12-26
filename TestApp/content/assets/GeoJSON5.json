@@ -1,0 +1,96 @@
+{
+    "features": [
+        {
+            "id": 1,
+            "geometry": {
+                "coordinates": [
+                    -121.2912591,
+                    37.95793455
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "Company name":"Microsoft Corporation",
+                "Phone":"(555) 555-4466",
+                "Eployes":"10 to 19",
+                "Company name":"Microsoft Corporation",
+                "address": "425 N El Dorado St",
+                "sales": "12443808"
+            },
+            "type": "Feature"
+        },
+        {
+            "id": 2,
+            "geometry": {
+                "coordinates": [
+                    -80.30525273,
+                    25.69553636
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "Company name":"Advanced Micro Devices Inc",
+                "Phone":"(555) 555-4000",
+                "Eployes":"5000 to 9999",
+                "address": "8040 Sw 69Th Ave",
+                "sales": "13767864"
+            },
+            "type": "Feature"
+        },
+        {
+            "id": 3,
+            "geometry": {
+                "coordinates": [
+                    -76.87608909,
+                    41.17876091
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "Company name":"Micro Focus",
+                "Phone":"(555) 555-4466",
+                "Eployes":"250 to 499",
+                "address": "2218 State Route 54",
+                "sales": "1378510"
+            },
+            "type": "Feature"
+        },
+        {
+            "id": 4,
+            "geometry": {
+                "coordinates": [
+                    -87.44710091,
+                    41.63902909
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "Company name":"Jsr Micro Inc",
+                "Phone":"(555) 555-4466",
+                "Eployes":"100 to 249",
+                "address": "2002 E Columbus Dr",
+                "sales": "18001101"
+            },
+            "type": "Feature"
+        },
+        {
+            "id": 5,
+            "geometry": {
+                "coordinates": [
+                    -121.8514845,
+                    36.60387636
+                ],
+                "type": "Point"
+            },
+            "properties": {
+                "Company name":"Micro Center Corporate Office",
+                "Phone":"(555) 555-4466",
+                "Eployes":"500 to 999",
+                "address": "550 Harcourt Ave",
+                "sales": "7893168"
+            },
+            "type": "Feature"
+        }
+    ],
+    "type": "FeatureCollection"
+}

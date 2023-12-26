@@ -1,0 +1,28 @@
+{
+  "version": 8,
+  "name": "Esri Satellite",
+  "metadata": {
+    "description": "map descirption..."
+  },
+  "sprite": "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_v2/VectorTileServer/resources/sprites/sprite",
+  "glyphs": "https://basemaps.arcgis.com/arcgis/rest/services/World_Basemap_v2/VectorTileServer/resources/fonts/{fontstack}/{range}.pbf",
+  "sources": {
+    "esri-imagery": {
+      "type": "raster",
+      "tiles": [
+        "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+      ],
+      "tileSize": 256
+    }
+  },
+  "layers": [
+    {
+      "id": "imagery",
+      "type": "raster",
+      "source": "esri-imagery",
+      "minzoom": 0,
+      "maxzoom": 22
+    }
+  ]
+}

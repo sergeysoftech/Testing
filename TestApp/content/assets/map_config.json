@@ -1,0 +1,114 @@
+{
+    "images": [
+        {
+            "id": "ball_blue",
+            "path": "content/images/bullet_ball_shape_blue.png"
+        },
+        {
+            "id": "ball_red",
+            "path": "content/images/bullet_ball_shape_red.png"
+        },
+        {
+            "id": "ball_green",
+            "path": "content/images/bullet_ball_shape_green.png"
+        }
+    ],
+    "layers": [
+        {
+            "id": "States",
+            "name": "States",
+            "paint": {
+                "fill-color": "#f7efde",
+                "fill-opacity": 1,
+                "fill-outline-color": "#d4b27a"
+            },
+            "source": "States",
+            "type": "fill"
+        },
+        {
+            "id": "GeoJSON5",
+            "layout": {
+                "icon-image": "ball_blue",
+                "icon-size": 0.5,
+                "text-anchor": "bottom",
+                "text-field": [
+                    "format",
+                    [
+                        "get",
+                        "Company name"
+                    ]
+                ],
+                "text-font": [
+                    "Belleza Regular"
+                ],
+                "text-radial-offset": 1
+            },
+            "name": "Small DB",
+            "paint": {
+                "text-halo-color": "white",
+                "text-halo-width": 1
+            },
+            "source": "GeoJSON5",
+            "type": "symbol"
+        },
+        {
+            "id": "StatesCapital",
+            "layout": {
+                "icon-image": "ball_red",
+                "icon-size": 0.5,
+                "text-anchor": "bottom",
+                "text-field": [
+                    "format",
+                    [
+                        "get",
+                        "Capital"
+                    ]
+                ],
+                "text-font": [
+                    "Belleza Regular"
+                ],
+                "text-radial-offset": 1
+            },
+            "name": "States capitals",
+            "paint": {
+                "text-halo-color": "white",
+                "text-halo-width": 1
+            },
+            "source": "StatesCapital",
+            "type": "symbol"
+        },
+        {
+            "id": "Counties",
+            "name": "Counties",
+            "paint": {
+                "fill-color": "#F7EFDE",
+                "fill-opacity": 0.75,
+                "fill-outline-color": "#6699FF"
+            },
+            "source": "Counties",
+            "type": "fill"
+        }
+    ],
+    "sources": {
+        "Counties": {
+            "data": "/content/assets/counties.json",
+            "generateId": true,
+            "type": "geojson"
+        },
+        "GeoJSON5": {
+            "data": "/content/assets/GeoJSON5.json",
+            "generateId": false,
+            "type": "geojson"
+        },
+        "States": {
+            "data": "https://maplibre.org/maplibre-gl-js/docs/assets/us_states.geojson",
+            "generateId": true,
+            "type": "geojson"
+        },
+        "StatesCapital": {
+            "data": "/content/assets/statescap.geojson",
+            "generateId": false,
+            "type": "geojson"
+        }
+    }
+}

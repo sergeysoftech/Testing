@@ -15,7 +15,26 @@
     ],
     "layers": [
         {
+            "externalConfig": "content/assets/esri-land-waters.json",
+            "id": "Basemap",
+            "layerType": "Basemap",
+            "name": "Basemap"
+        },
+        {
+            "externalConfig": "content/assets/esri-roads.json",
+            "id": "Roads",
+            "layerType": "Cosmetics",
+            "name": "Roads"
+        },
+        {
+            "externalConfig": "content/assets/esri-cities.json",
+            "id": "Cities",
+            "layerType": "Cosmetics",
+            "name": "Cities"
+        },
+        {
             "id": "States",
+            "layerType": "Map",
             "name": "States",
             "paint": {
                 "fill-color": "#f7efde",
@@ -27,58 +46,37 @@
         },
         {
             "id": "GeoJSON5",
-            "layout": {
-                "icon-image": "ball_blue",
-                "icon-size": 0.5,
-                "text-anchor": "bottom",
-                "text-field": [
-                    "format",
-                    [
-                        "get",
-                        "Company name"
-                    ]
-                ],
-                "text-font": [
-                    "Belleza Regular"
-                ],
-                "text-radial-offset": 1
-            },
+            "layerType": "Database",
             "name": "Small DB",
             "paint": {
-                "text-halo-color": "white",
-                "text-halo-width": 1
+                "circle-color": "red",
+                "circle-radius": 6,
+                "circle-stroke-color": "gray",
+                "circle-stroke-opacity": 1,
+                "circle-stroke-width": 1
             },
             "source": "GeoJSON5",
-            "type": "symbol"
+            "toolTipField": "Company name",
+            "type": "circle"
         },
         {
             "id": "StatesCapital",
-            "layout": {
-                "icon-image": "ball_red",
-                "icon-size": 0.5,
-                "text-anchor": "bottom",
-                "text-field": [
-                    "format",
-                    [
-                        "get",
-                        "Capital"
-                    ]
-                ],
-                "text-font": [
-                    "Belleza Regular"
-                ],
-                "text-radial-offset": 1
-            },
+            "layerType": "Database",
             "name": "States capitals",
             "paint": {
-                "text-halo-color": "white",
-                "text-halo-width": 1
+                "circle-color": "blue",
+                "circle-radius": 6,
+                "circle-stroke-color": "gray",
+                "circle-stroke-opacity": 1,
+                "circle-stroke-width": 1
             },
             "source": "StatesCapital",
-            "type": "symbol"
+            "toolTipField": "Capital",
+            "type": "circle"
         },
         {
             "id": "Counties",
+            "layerType": "Map",
             "name": "Counties",
             "paint": {
                 "fill-color": "#F7EFDE",
@@ -110,5 +108,6 @@
             "generateId": false,
             "type": "geojson"
         }
-    }
+    },
+    "style": "content/assets/esri-streets-no-layers.json"
 }

@@ -1,0 +1,994 @@
+{
+    "layers": [
+        {
+            "filter": [
+                "==",
+                "_label_class",
+                5
+            ],
+            "id": "City large scale/town small",
+            "layout": {
+                "icon-image": "City large scale",
+                "symbol-avoid-edges": true,
+                "text-field": "{_name_global}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-letter-spacing": 0.08,
+                "text-max-width": 8,
+                "text-size": {
+                    "stops": [
+                        [
+                            10,
+                            10
+                        ],
+                        [
+                            15,
+                            16
+                        ],
+                        [
+                            17,
+                            20
+                        ]
+                    ]
+                }
+            },
+            "maxzoom": 17,
+            "minzoom": 10,
+            "paint": {
+                "text-color": "#000000",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 2
+            },
+            "source": "esri",
+            "source-layer": "City large scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_label_class",
+                4
+            ],
+            "id": "City large scale/town large",
+            "layout": {
+                "icon-image": "City large scale",
+                "symbol-avoid-edges": true,
+                "text-field": "{_name_global}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-letter-spacing": 0.09,
+                "text-max-width": 8,
+                "text-size": {
+                    "stops": [
+                        [
+                            10,
+                            10.5
+                        ],
+                        [
+                            15,
+                            18
+                        ],
+                        [
+                            16,
+                            20
+                        ]
+                    ]
+                }
+            },
+            "maxzoom": 16,
+            "minzoom": 10,
+            "paint": {
+                "text-color": "#000000",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 2
+            },
+            "source": "esri",
+            "source-layer": "City large scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_label_class",
+                3
+            ],
+            "id": "City large scale/small",
+            "layout": {
+                "icon-image": "City large scale",
+                "symbol-avoid-edges": true,
+                "text-field": "{_name_global}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-letter-spacing": 0.1,
+                "text-max-width": 8,
+                "text-size": {
+                    "stops": [
+                        [
+                            10,
+                            11
+                        ],
+                        [
+                            15,
+                            18
+                        ]
+                    ]
+                }
+            },
+            "maxzoom": 15,
+            "minzoom": 10,
+            "paint": {
+                "text-color": "#000000",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 2
+            },
+            "source": "esri",
+            "source-layer": "City large scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_label_class",
+                2
+            ],
+            "id": "City large scale/medium",
+            "layout": {
+                "icon-image": "City large scale",
+                "symbol-avoid-edges": true,
+                "text-field": "{_name_global}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-letter-spacing": 0.1,
+                "text-max-width": 8,
+                "text-size": {
+                    "stops": [
+                        [
+                            10,
+                            12
+                        ],
+                        [
+                            14,
+                            20
+                        ]
+                    ]
+                }
+            },
+            "maxzoom": 15,
+            "minzoom": 10,
+            "paint": {
+                "text-color": "#000000",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 2
+            },
+            "source": "esri",
+            "source-layer": "City large scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_label_class",
+                1
+            ],
+            "id": "City large scale/large",
+            "layout": {
+                "icon-image": "City large scale",
+                "symbol-avoid-edges": true,
+                "text-field": "{_name_global}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-letter-spacing": 0.1,
+                "text-max-width": 8,
+                "text-size": {
+                    "stops": [
+                        [
+                            10,
+                            13
+                        ],
+                        [
+                            14,
+                            22
+                        ]
+                    ]
+                }
+            },
+            "maxzoom": 14,
+            "minzoom": 10,
+            "paint": {
+                "text-color": "#000000",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 2
+            },
+            "source": "esri",
+            "source-layer": "City large scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_label_class",
+                0
+            ],
+            "id": "City large scale/x large",
+            "layout": {
+                "icon-image": "City large scale",
+                "symbol-avoid-edges": true,
+                "text-field": "{_name_global}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-letter-spacing": 0.1,
+                "text-max-width": 8,
+                "text-size": {
+                    "stops": [
+                        [
+                            10,
+                            14
+                        ],
+                        [
+                            14,
+                            25
+                        ]
+                    ]
+                }
+            },
+            "maxzoom": 14,
+            "minzoom": 10,
+            "paint": {
+                "text-color": "#000000",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 2
+            },
+            "source": "esri",
+            "source-layer": "City large scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                17
+            ],
+            "id": "City small scale/town small non capital",
+            "layout": {
+                "icon-image": "City small scale/town small non capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#4E4E4E",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                15
+            ],
+            "id": "City small scale/town large non capital",
+            "layout": {
+                "icon-image": "City small scale/town large non capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#4E4E4E",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                12
+            ],
+            "id": "City small scale/small non capital",
+            "layout": {
+                "icon-image": "City small scale/small non capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#4E4E4E",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                9
+            ],
+            "id": "City small scale/medium non capital",
+            "layout": {
+                "icon-image": "City small scale/medium non capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#343434",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                18
+            ],
+            "id": "City small scale/other capital",
+            "layout": {
+                "icon-image": "City small scale/other capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#4E4E4E",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                14
+            ],
+            "id": "City small scale/town large other capital",
+            "layout": {
+                "icon-image": "City small scale/town large other capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#4E4E4E",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                11
+            ],
+            "id": "City small scale/small other capital",
+            "layout": {
+                "icon-image": "City small scale/small other capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#4E4E4E",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                8
+            ],
+            "id": "City small scale/medium other capital",
+            "layout": {
+                "icon-image": "City small scale/medium other capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#343434",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                16
+            ],
+            "id": "City small scale/town small admin0 capital",
+            "layout": {
+                "icon-image": "City small scale/town small admin0 capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#4E4E4E",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                13
+            ],
+            "id": "City small scale/town large admin0 capital",
+            "layout": {
+                "icon-image": "City small scale/town large admin0 capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#4E4E4E",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                10
+            ],
+            "id": "City small scale/small admin0 capital",
+            "layout": {
+                "icon-image": "City small scale/small admin0 capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Regular"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#4E4E4E",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                7
+            ],
+            "id": "City small scale/medium admin0 capital",
+            "layout": {
+                "icon-image": "City small scale/medium admin0 capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": "#343434",
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                5
+            ],
+            "id": "City small scale/large other capital",
+            "layout": {
+                "icon-image": "City small scale/large other capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": {
+                    "stops": [
+                        [
+                            2,
+                            "#343434"
+                        ],
+                        [
+                            3,
+                            "#000000"
+                        ]
+                    ]
+                },
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                2
+            ],
+            "id": "City small scale/x large admin2 capital",
+            "layout": {
+                "icon-image": "City small scale/x large admin2 capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 12
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": {
+                    "stops": [
+                        [
+                            2,
+                            "#343434"
+                        ],
+                        [
+                            3,
+                            "#000000"
+                        ]
+                    ]
+                },
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                6
+            ],
+            "id": "City small scale/large non capital",
+            "layout": {
+                "icon-image": "City small scale/large non capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": {
+                    "stops": [
+                        [
+                            2,
+                            "#343434"
+                        ],
+                        [
+                            3,
+                            "#000000"
+                        ]
+                    ]
+                },
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                4
+            ],
+            "id": "City small scale/large admin0 capital",
+            "layout": {
+                "icon-image": "City small scale/large admin0 capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 10.67
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": {
+                    "stops": [
+                        [
+                            2,
+                            "#2d2d2d"
+                        ],
+                        [
+                            3,
+                            "#000000"
+                        ]
+                    ]
+                },
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                3
+            ],
+            "id": "City small scale/x large non capital",
+            "layout": {
+                "icon-image": "City small scale/x large non capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 12
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": {
+                    "stops": [
+                        [
+                            2,
+                            "#343434"
+                        ],
+                        [
+                            3,
+                            "#000000"
+                        ]
+                    ]
+                },
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                1
+            ],
+            "id": "City small scale/x large admin1 capital",
+            "layout": {
+                "icon-image": "City small scale/x large admin1 capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 12
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": {
+                    "stops": [
+                        [
+                            2,
+                            "#343434"
+                        ],
+                        [
+                            3,
+                            "#000000"
+                        ]
+                    ]
+                },
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        },
+        {
+            "filter": [
+                "==",
+                "_symbol",
+                0
+            ],
+            "id": "City small scale/x large admin0 capital",
+            "layout": {
+                "icon-image": "City small scale/x large admin0 capital",
+                "icon-padding": 1,
+                "symbol-avoid-edges": true,
+                "text-anchor": "bottom-left",
+                "text-field": "{_name}",
+                "text-font": [
+                    "Arial Bold"
+                ],
+                "text-justify": "left",
+                "text-max-width": 8,
+                "text-offset": [
+                    0.13,
+                    -0.13
+                ],
+                "text-size": 12
+            },
+            "maxzoom": 10,
+            "minzoom": 2,
+            "paint": {
+                "text-color": {
+                    "stops": [
+                        [
+                            2,
+                            "#2d2d2d"
+                        ],
+                        [
+                            3,
+                            "#000000"
+                        ]
+                    ]
+                },
+                "text-halo-color": "#FFFFFF",
+                "text-halo-width": 0.67
+            },
+            "source": "esri",
+            "source-layer": "City small scale",
+            "type": "symbol"
+        }
+    ]
+}
